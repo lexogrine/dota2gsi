@@ -5,12 +5,12 @@ The GSI object takes raw request from Dota 2 GSI's system, parses this to more c
 
 ## Installing
 ### For Node and React
-```npm install dotagsi```
+```npm install @lexogrine/dotagsi```
 
 ## Example #1
 ```javascript
 import express from 'express';
-import { DOTA2GSI } from 'dotagsi';
+import { DOTA2GSI } from '@lexogrine/dotagsi';
 
 const app = express();
 const GSI = new DOTA2GSI();
