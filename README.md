@@ -418,7 +418,7 @@ Beside that, DOTA2GSI implements standard Event Emitter interfaces.
 
 ### Maintainers
 
-This project is maintained by [Lexogrine](https://lexogrine.com) ([LHM.gg](https://lhm.gg)).
+This fork is maintained by [Lexogrine](https://lexogrine.com) ([LHM.gg](https://lhm.gg)).
 
 Lexogrine is a premier [Node.js development company] and AI software development house, delivering high-end AI, web, and mobile design services to a global clientele. In addition to bespoke development, Lexogrine provides a suite of innovative applications, such as LHM.gg, designed to transform professional collaboration and streamline industry-specific workflows.
 
