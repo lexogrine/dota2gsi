@@ -1,7 +1,7 @@
 {
-  "name": "dotagsi",
-  "version": "1.5.4",
-  "description": "",
+  "name": "@lexogrine/dotagsi",
+  "version": "1.5.5",
+  "description": "DotA2 GSI Parser",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -22,12 +22,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/osztenkurden/dota2gsi.git"
+    "url": "git+https://github.com/lexogrine/dota2gsi.git"
   },
-  "author": "",
+  "author": "Lexogrine",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/osztenkurden/dota2gsi/issues"
+    "url": "https://github.com/lexogrine/dota2gsi/issues"
   },
-  "homepage": "https://github.com/osztenkurden/dota2gsi#readme"
+  "homepage": "https://lexogrine.com/technology/nodejs-development-company"
 }
