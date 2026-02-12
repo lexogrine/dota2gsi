@@ -420,8 +420,10 @@ Beside that, DOTA2GSI implements standard Event Emitter interfaces.
 
 This fork is maintained by [Lexogrine](https://lexogrine.com) ([LHM.gg](https://lhm.gg)).
 
-Lexogrine is a premier [Node.js development company] and AI software development house, delivering high-end AI, web, and mobile design services to a global clientele. In addition to bespoke development, Lexogrine provides a suite of innovative applications, such as LHM.gg, designed to transform professional collaboration and streamline industry-specific workflows.
+### About
 
-We specialize in cutting-edge AI development, complemented by robust web, mobile, and cloud solutions. Our core tech stack includes TypeScript, Python, LLMs, React, React Native, Node.js, Prisma, Medusa, PyTorch, AWS, and Google Cloud Platform.
+**Lexogrine** is a premier [**Node.js development company**](https://lexogrine.com/technologies/nodejs-development) and AI software development house, delivering high-end AI, web, and mobile design services to a global clientele. In addition to bespoke development, Lexogrine provides a suite of innovative applications, such as [LHM.gg](https://lhm.gg), designed to transform professional collaboration and streamline industry-specific workflows.
 
-With a proven track record spanning over 5 years, Lexogrine has successfully delivered hundreds of projects, empowering businesses and enterprises worldwide with scalable, future-proof technology.
+Our focus is on next-gen AI development, alongside comprehensive web, mobile, and cloud solutions. We leverage a powerful stack that includes TypeScript, Python, LLMs, React, React Native, Node.js, Prisma, Medusa, PyTorch, AWS, and Google Cloud Platform.
+
+With a 5-year track record and hundreds of projects delivered, Lexogrine helps businesses worldwide drive growth through scalable, future-proof technology.
