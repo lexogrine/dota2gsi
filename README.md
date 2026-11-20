@@ -171,44 +171,60 @@ Beside that, DOTA2GSI implements standard Event Emitter interfaces.
 
 #### Neutral Items
 
+Since 2.0.0, `neutral_items` keeps the team/tier projection for HUD boards but
+only includes data present in the current packet. Missing `neutralitems` gives
+`null`; an empty object gives `{}`. Teams and tiers are optional. Enumerate
+`tierN` keys rather than assuming five tiers: Dota 7.42 currently sends
+`tier0` through `tier3`. No `tier4` is synthesized.
+
+Version 2.0.0 is a breaking API change: `NeutralItemInTier.state` is now only
+`'selected'`, with a required `player_id`; the obsolete `equipped`, `stash`, and
+`unknown` neutral-item variants are removed. `completion_time` and the fabricated
+`max_count` are removed. Consumers must handle optional teams, tiers, slots, and
+levels, and must not infer current equipment or a FASTER comparison from selections.
+
 |Property|Type|
 |---|---|
-|team2|`Team Neutral Items Tiers`|
-|team3|`Team Neutral Items Tiers`|
-|tier0|`Neutral Items Tier Summary`|
-|tier1|`Neutral Items Tier Summary`|
-|tier2|`Neutral Items Tier Summary`|
-|tier3|`Neutral Items Tier Summary`|
-|tier4|`Neutral Items Tier Summary`|
+|team2?|`TeamNeutralItems` (Radiant)|
+|team3?|`TeamNeutralItems` (Dire)|
+|tierN?|`NeutralItemsTierRaw`|
 
 #### Neutral Items Tier Summary
 |Property|Type|
 |---|---|
 |tier|`number`|
-|max_count|`number`|
 |drop_after_time|`number`|
+|madstone_required|`number`|
+|escalating_recraft_cost|`number`|
+
+Tier summaries are copied from the raw packet, without a fabricated `max_count`.
 
 #### Team Neutral Items Tiers
 
 |Property|Type|
 |---|---|
-|items_found|`number`|
-|tier0|`Neutral Items In Tier`|
-|tier1|`Neutral Items In Tier`|
-|tier2|`Neutral Items In Tier`|
-|tier3|`Neutral Items In Tier`|
-|tier4|`Neutral Items In Tier`|
+|items_found?|`number`, only when supplied by the game|
+|tierN?|`NeutralItemsInTier`, only when present on a team's player|
 
 #### Team Neutral Items in Tier
 
 |Property|Type|
 |---|---|
-|item0|`Single Neutral Item`|
-|item1|`Single Neutral Item`|
-|item2|`Single Neutral Item`|
-|item3|`Single Neutral Item`|
-|item4|`Single Neutral Item`|
-|completion_time|`number or null`|
+|itemN?|`NeutralItemInTier`|
+
+Players are ordered numerically by their `playerN` keys within each team.
+Their positions give `item0` through `item4` for a normal five-player roster.
+Slots are assigned before checking selections, so an unselected/missing tier
+leaves a hole rather than shifting the remaining players. A partial roster is
+ordered among the players actually present; always use `player_id` for identity,
+not the slot index. A tier with no selected trinkets is `{}`.
+
+All choice values are searched (including `choice4` and later keys). Only a
+selected, nonempty trinket produces an item. Missing choices or an enchantment
+without a selected trinket do not create an empty item. `state: 'selected'` means
+selected in that tier, not necessarily currently equipped in the inventory.
+No completion times are inferred or retained and no
+FASTER comparison is supported.
 
 #### Single Neutral Item
 
@@ -216,8 +232,30 @@ Beside that, DOTA2GSI implements standard Event Emitter interfaces.
 |---|---|
 |name|`string`|
 |tier|`number`|
-|state|`'stash' | 'unknown' | 'equipped'`|
-|player_id|`number or null`|
+|state|`'selected'` (selection, not current equipment)|
+|player_id|`number`, exact numeric suffix of the raw `playerN` key, including Dire IDs|
+|level?|`number`, only if the selected trinket supplied `item_level`|
+|enchantment_name?|`string`, only if an enchantment is selected|
+|enchantment_level?|`number`, only if that enchantment supplied `item_level`|
+
+`tier` is the raw player's tier value, not a constant or the item's original
+drop tier. Missing levels are omitted, never replaced by `1` (or `0`).
+Raw choices, madstone counters and crafting state remain available in
+`Dota2Raw.neutralitems`; they are not added to the HUD projection.
+
+Neutral raw and parsed types are exported from `@lexogrine/dotagsi`, including
+`NeutralItemsRaw`, `NeutralItemsTierRaw`, `TeamNeutralItemsRaw`,
+`NeutralItemsInPlayerRaw`, `NeutralItemsInPlayerTierRaw`,
+`NeutralItemsInPlayerTierChoicesRaw`, `NeutralItemChoiceRaw`, `TierIds`,
+`NeutralItems`, `TeamNeutralItems`, `NeutralItemsInTier`, and `NeutralItemInTier`.
+Tier and choice maps are typed partial maps, not untyped `{}` unions.
+
+Both `require('@lexogrine/dotagsi')` and `import ... from '@lexogrine/dotagsi'`
+resolve to their respective CJS and ESM builds. Run `npm test` (Node 18+) to
+build both formats and run the built-in Node regression tests.
+The neutral-item test fixture is synthetic regression data modeled on the live
+Dota 7.42 shape, including a deliberate tier2 safety-bubble `choice4` selection;
+it is not an untouched packet excerpt and contains no account or match identifiers.
 
 #### Team
 

@@ -220,9 +220,7 @@ class DOTA2GSI {
 			player: players.find(player => player.hero && player.hero.selected_unit) || null,
 			buildings: rawBuildings.map(entry => parseBuilding(entry.id, entry.building)),
 			roshan: rawGSI.roshan ? rawGSI.roshan : null,
-			neutral_items:
-				parseNeutralItems(rawGSI.map.game_time, rawGSI.neutralitems, this.last?.neutral_items || undefined) ||
-				null,
+			neutral_items: parseNeutralItems(rawGSI.neutralitems) || null,
 			events: rawGSI.events ? rawGSI.events : null,
 			outposts: parseOutposts(rawGSI.minimap),
 			draft: {
@@ -298,6 +296,17 @@ class DOTA2GSI {
 }
 
 export { DOTA2GSI, getItem };
+export type {
+	NeutralItemChoiceRaw,
+	NeutralItemsInPlayerTierChoicesRaw,
+	NeutralItemsInPlayerTierRaw,
+	NeutralItemsInPlayerRaw,
+	TeamNeutralItemsRaw,
+	NeutralItemsTierRaw,
+	NeutralItemsRaw,
+	TierIds
+} from './dota2';
+export type { NeutralItemInTier, NeutralItemsInTier, TeamNeutralItems } from './parsed';
 export type {
 	PlayerRaw,
 	Dota2Raw,

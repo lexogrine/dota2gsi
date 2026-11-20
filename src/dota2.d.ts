@@ -223,10 +223,9 @@ interface Draft {
 
 type Wearables = TeamPlayerList<Slots<'wearable' | 'style', number>>;
 
-export type TierIds = 0 | 1 | 2 | 3 | 4;
+export type TierIds = number;
 export type PlayerInTierIds = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 export type ItemTierIds = 0 | 1 | 2 | 3 | 4;
-type ChoiceIds = 0 | 1 | 2 | 3;
 type ItemIds = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 export interface MinimapPoint {
@@ -318,46 +317,48 @@ export interface League {
 	match_id: string;
 }
 
-type NeutralItemsInPlayerTierChoicesRaw = {
-	[x in `choice${ChoiceIds}`]: {
-		item_name: string;
-		item_level: number;
-		selected: boolean;
-	} 
+export type NeutralItemChoiceRaw = {
+	item_name: string;
+	item_level?: number;
+	selected: boolean;
 };
+
+export type NeutralItemsInPlayerTierChoicesRaw = Partial<Record<`choice${number}`, NeutralItemChoiceRaw>>;
 
 export type NeutralItemsInPlayerTierRaw = {
 	tier: number;
-	trinket_choices: {} | NeutralItemsInPlayerTierChoicesRaw;
-	enchantment_choices: {} | NeutralItemsInPlayerTierChoicesRaw
-}
-
+	times_crafted?: number;
+	trinket_choices?: NeutralItemsInPlayerTierChoicesRaw;
+	enchantment_choices?: NeutralItemsInPlayerTierChoicesRaw;
+};
 
 export type NeutralItemsInPlayerRaw = {
 	current_madstone: number;
 	total_madstone: number;
-	crafting_tier: number; }
-	& {
-	[x in `tier${TierIds}`]: NeutralItemsInPlayerTierRaw;
+	crafting_tier: number;
+} & {
+	[x in `tier${TierIds}`]?: NeutralItemsInPlayerTierRaw;
 };
 
 export type TeamNeutralItemsRaw = {
-	items_found: number;
+	items_found?: number;
 } & {
-	[x in `player${PlayerInTierIds}`]: NeutralItemsInPlayerRaw;
+	[x in `player${number}`]?: NeutralItemsInPlayerRaw;
+};
+
+export type NeutralItemsTierRaw = {
+	tier: number;
+	drop_after_time: number;
+	madstone_required: number;
+	escalating_recraft_cost: number;
 };
 
 export type NeutralItemsRaw = {
-	team2: TeamNeutralItemsRaw;
-	team3: TeamNeutralItemsRaw;
-	max_madstone: number;
+	team2?: TeamNeutralItemsRaw;
+	team3?: TeamNeutralItemsRaw;
+	max_madstone?: number;
 } & {
-	[x in `tier${TierIds}`]: {
-		tier: number;
-		madstone_required: number;
-		drop_after_time: number;
-		escalating_recraft_cost: number;
-	};
+	[x in `tier${TierIds}`]?: NeutralItemsTierRaw;
 };
 
 export enum XPReason {

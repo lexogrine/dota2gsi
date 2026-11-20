@@ -1,4 +1,4 @@
-import { GSIEvent as GSIEventRaw, PlayerInTierIds, Roshan, TierIds } from './dota2';
+import { GSIEvent as GSIEventRaw, NeutralItemsTierRaw, Roshan, TierIds } from './dota2';
 
 export type Faction = 'dire' | 'radiant';
 //Dire = bad = team3, radiant = good = team2;
@@ -268,43 +268,29 @@ export type Wearable = {
 	value: number;
 };
 
-export type NeutralItemInTier =
-	{
-		name: string;
-		tier: number;
-	} & (
-		| {
-			state: 'stash';
-		}
-		| {
-			state: 'unknown';
-		}
-		| {
-			state: 'equipped';
-			player_id: number;
-		}
-	);
-
+export type NeutralItemInTier = {
+	state: 'selected';
+	name: string;
+	tier: number;
+	player_id: number;
+	level?: number;
+	enchantment_name?: string;
+	enchantment_level?: number;
+};
 
 export type NeutralItemsInTier = {
-	[x in `item${ItemTierIds}`]: NeutralItemInTier
-} & {
-	completion_time?: number;
+	[x in `item${number}`]?: NeutralItemInTier;
 };
 
 export type TeamNeutralItems = {
-	items_found: number;
+	items_found?: number;
 } & {
-	[x in `tier${TierIds}`]: NeutralItemsInTier;
+	[x in `tier${TierIds}`]?: NeutralItemsInTier;
 };
 
 export type NeutralItems = {
-	team2: TeamNeutralItems;
-	team3: TeamNeutralItems;
+	team2?: TeamNeutralItems;
+	team3?: TeamNeutralItems;
 } & {
-	[x in `tier${TierIds}`]: {
-		tier: number;
-		max_count: number;
-		drop_after_time: number;
-	};
+	[x in `tier${TierIds}`]?: NeutralItemsTierRaw;
 };

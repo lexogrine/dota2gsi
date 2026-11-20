@@ -14,9 +14,7 @@ import type {
 	TeamBuildingsKeys,
 	TeamDraftRaw,
 	MinimapPoint,
-	NeutralItemsInPlayerRaw,
-	TeamNeutralItemsRaw,
-	TierIds
+	NeutralItemsInPlayerRaw
 } from './dota2';
 import type {
 	Ability,
@@ -35,7 +33,18 @@ import type {
 	Wearable,
 	WearableType
 } from './interfaces';
-import type { Courier, CourierItem, Dota2, DraftEntry, Hero, NeutralItemInTier, NeutralItems, NeutralItemsInTier, Outposts, Player, TeamNeutralItems } from './parsed';
+import type {
+	Courier,
+	CourierItem,
+	Dota2,
+	DraftEntry,
+	Hero,
+	NeutralItemInTier,
+	NeutralItems,
+	Outposts,
+	Player,
+	TeamNeutralItems
+} from './parsed';
 
 type RadiantPlayers = PlayerKey<RadiantPlayerIds>;
 type DirePlayers = PlayerKey<DirePlayerIds>;
@@ -319,144 +328,55 @@ export const parseOutposts = (minimap?: { [pointName: string]: MinimapPoint }): 
 	};
 };
 
-const checkItemTier = (tier: any) => {
-	for (const value of ['item0', 'item1', 'item2', 'item3', 'item4']) {
-		if (tier[value] === undefined) {
-			return false;
-		}
-	}
-	return true;
-};
-
-const parseTierIntoOldFormat = (players: NeutralItemsInPlayerRaw[], tier: TierIds): NeutralItemsInTier => {
-	const result = players.map((player, i) => {
-		const item = {
-			state: 'equipped' as const,
-			tier: 0,
-			name: '',
-			level: 0,
-			enchantment_name: '',
-			enchantment_level: 0,
-			player_id: i,
-		};
-
-		const currentTier = player[`tier${tier}`];
-
-		if ('choice0' in currentTier.trinket_choices) {
-			const trinket_choices = currentTier.trinket_choices;
-			const choices = [trinket_choices.choice0, trinket_choices.choice1, trinket_choices.choice2, trinket_choices.choice3];
-			const selectedChoice = choices.find(choice => choice.selected);
-			if (selectedChoice) {
-				item.name = selectedChoice.item_name;
-				item.level = selectedChoice.item_level;
-			}
-		}
-
-		if ('choice0' in currentTier.enchantment_choices) {
-			const enchantment_choices = currentTier.enchantment_choices;
-			const choices = [enchantment_choices.choice0, enchantment_choices.choice1, enchantment_choices.choice2, enchantment_choices.choice3];
-			const selectedChoice = choices.find(choice => choice.selected);
-			if (selectedChoice) {
-				item.enchantment_name = selectedChoice.item_name;
-				item.enchantment_level = selectedChoice.item_level || 1
-			}
-		}
-
-		return item;
-	});
-
-	return {
-		item0: result[0]!,
-		item1: result[1]!,
-		item2: result[2]!,
-		item3: result[3]!,
-		item4: result[4]!,
-	}
-}
-
-const parseNeutralItemsTeamIntoOldFormat = (team: TeamNeutralItemsRaw): TeamNeutralItems => {
-	const players = [team.player0, team.player1, team.player2, team.player3, team.player4,
-		team.player5, team.player6, team.player7, team.player8, team.player9
-	].filter(player => player);
-	const result: TeamNeutralItems = {
-		items_found: team.items_found,
-		tier0: parseTierIntoOldFormat(players, 0),
-		tier1: parseTierIntoOldFormat(players, 1),
-		tier2: parseTierIntoOldFormat(players, 2),
-		tier3: parseTierIntoOldFormat(players, 3),
-		tier4: parseTierIntoOldFormat(players, 4),
-	}
-	return result;
-}
-
-const parseNeutralItemTierIntoOldFormat = (tier: {
-	tier: number;
-	madstone_required: number;
-	drop_after_time: number;
-	escalating_recraft_cost: number;
-}):  {
-	tier: number;
-	max_count: number;
-	drop_after_time: number;
-	madstone_required: number;
-	escalating_recraft_cost: number;
-} => {
-	return {
-		...tier,
-		max_count: 1
-	}
-}
-
-const parseNeutralItemsIntoOldFormat = (neutralItems: NeutralItemsRaw): NeutralItems => {
-	const result: NeutralItems = {
-		tier0: parseNeutralItemTierIntoOldFormat(neutralItems.tier0),
-		tier1: parseNeutralItemTierIntoOldFormat(neutralItems.tier1),
-		tier2: parseNeutralItemTierIntoOldFormat(neutralItems.tier2),
-		tier3: parseNeutralItemTierIntoOldFormat(neutralItems.tier3),
-		tier4: parseNeutralItemTierIntoOldFormat(neutralItems.tier4),
-
-		team2: parseNeutralItemsTeamIntoOldFormat(neutralItems.team2),
-		team3: parseNeutralItemsTeamIntoOldFormat(neutralItems.team3)
-	};
-
-
-	return result;
-}
-
-export const parseNeutralItems = (
-	currentTime: number,
-	neutralItems?: NeutralItemsRaw,
-	lastNeutralItems?: NeutralItems
-): NeutralItems | undefined => {
+export const parseNeutralItems = (neutralItems?: NeutralItemsRaw): NeutralItems | undefined => {
 	if (!neutralItems) return undefined;
-
-	const newNeutralItems = parseNeutralItemsIntoOldFormat(neutralItems);
-
-	if (!lastNeutralItems) return newNeutralItems;
-
-	const result: NeutralItems = { ...newNeutralItems };
-
-	const teams = [
-		[result.team2, lastNeutralItems.team2],
-		[result.team3, lastNeutralItems.team3]
-	];
-	for (const [nowTeam, lastTeam] of teams) {
-		if (!nowTeam || !lastTeam) continue;
-		for (const [tierNow, tierThen] of [
-			[nowTeam.tier0, lastTeam.tier0],
-			[nowTeam.tier1, lastTeam.tier1],
-			[nowTeam.tier2, lastTeam.tier2],
-			[nowTeam.tier3, lastTeam.tier3],
-			[nowTeam.tier4, lastTeam.tier4]
-		]) {
-			if (!tierNow || !tierThen) continue;
-			if (tierThen.completion_time) {
-				tierNow.completion_time = tierThen.completion_time;
-			} else if (!checkItemTier(tierThen) && checkItemTier(tierNow)) {
-				tierNow.completion_time = currentTime;
-			}
-		}
+	const result: NeutralItems = {};
+	for (const key of Object.keys(neutralItems)) {
+		if (!/^tier\d+$/.test(key)) continue;
+		const tierKey = key as `tier${number}`;
+		const tier = neutralItems[tierKey];
+		if (tier) result[tierKey] = { ...tier };
 	}
 
-	return newNeutralItems;
+	for (const teamKey of ['team2', 'team3'] as const) {
+		const team = neutralItems[teamKey];
+		if (!team) continue;
+		const parsedTeam: TeamNeutralItems = {};
+		if (team.items_found !== undefined) parsedTeam.items_found = team.items_found;
+		const players = Object.entries(team)
+			.filter((entry): entry is [string, NeutralItemsInPlayerRaw] => /^player\d+$/.test(entry[0]) && !!entry[1])
+			.sort(([a], [b]) => Number(a.slice(6)) - Number(b.slice(6)));
+
+		// Slots follow the team's sorted roster, not the subset with selected trinkets.
+		players.forEach(([playerKey, player], slot) => {
+			for (const key of Object.keys(player)) {
+				if (!/^tier\d+$/.test(key)) continue;
+				const tierKey = key as `tier${number}`;
+				const tier = player[tierKey];
+				if (!tier) continue;
+				const items = (parsedTeam[tierKey] ??= {});
+				const trinket = Object.values(tier.trinket_choices ?? {}).find(
+					choice => choice?.selected && choice.item_name
+				);
+				if (!trinket) continue;
+				const item: NeutralItemInTier = {
+					state: 'selected',
+					tier: tier.tier,
+					name: trinket.item_name,
+					player_id: Number(playerKey.slice(6))
+				};
+				if (trinket.item_level !== undefined) item.level = trinket.item_level;
+				const enchantment = Object.values(tier.enchantment_choices ?? {}).find(
+					choice => choice?.selected && choice.item_name
+				);
+				if (enchantment) {
+					item.enchantment_name = enchantment.item_name;
+					if (enchantment.item_level !== undefined) item.enchantment_level = enchantment.item_level;
+				}
+				items[`item${slot}`] = item;
+			}
+		});
+		result[teamKey] = parsedTeam;
+	}
+	return result;
 };

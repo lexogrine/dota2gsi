@@ -1,0 +1,80 @@
+{
+  "max_madstone": 40,
+  "tier0": { "tier": 0, "drop_after_time": 0, "madstone_required": 6, "escalating_recraft_cost": 0 },
+  "tier1": { "tier": 1, "drop_after_time": 900, "madstone_required": 10, "escalating_recraft_cost": 0 },
+  "tier2": { "tier": 2, "drop_after_time": 1800, "madstone_required": 10, "escalating_recraft_cost": 0 },
+  "tier3": { "tier": 3, "drop_after_time": 3000, "madstone_required": 14, "escalating_recraft_cost": 6 },
+  "team3": {
+    "player5": {
+      "tier0": {
+        "tier": 0,
+        "times_crafted": 1,
+        "trinket_choices": {
+          "choice0": { "item_name": "item_chipped_vest", "selected": false },
+          "choice1": { "item_name": "item_weighted_dice", "selected": false },
+          "choice2": { "item_name": "item_seeds_of_serenity", "selected": false },
+          "choice3": { "item_name": "item_kobold_cup", "selected": true }
+        },
+        "enchantment_choices": {
+          "choice0": { "item_name": "item_enhancement_quickened", "item_level": 1, "selected": false },
+          "choice1": { "item_name": "item_enhancement_vital", "item_level": 1, "selected": false },
+          "choice2": { "item_name": "item_enhancement_mystical", "item_level": 1, "selected": true },
+          "choice3": { "item_name": "item_enhancement_tough", "item_level": 1, "selected": false }
+        }
+      },
+      "tier1": {
+        "tier": 1,
+        "times_crafted": 1,
+        "trinket_choices": {
+          "choice0": { "item_name": "item_safety_bubble", "selected": true },
+          "choice1": { "item_name": "item_jidi_pollen_bag", "selected": false },
+          "choice2": { "item_name": "item_imp_claw", "selected": false },
+          "choice3": { "item_name": "item_partisans_brand", "selected": false },
+          "choice4": { "item_name": "item_kobold_cup", "selected": false }
+        },
+        "enchantment_choices": {
+          "choice0": { "item_name": "item_enhancement_quickened", "item_level": 2, "selected": false },
+          "choice1": { "item_name": "item_enhancement_vital", "item_level": 2, "selected": false },
+          "choice2": { "item_name": "item_enhancement_mystical", "item_level": 2, "selected": false },
+          "choice3": { "item_name": "item_enhancement_tough", "item_level": 2, "selected": false },
+          "choice4": { "item_name": "item_enhancement_keen_eyed", "item_level": 1, "selected": true }
+        }
+      },
+      "tier2": {
+        "tier": 2,
+        "times_crafted": 1,
+        "trinket_choices": {
+          "choice0": { "item_name": "item_idol_of_screeauk", "selected": true },
+          "choice1": { "item_name": "item_rattlecage", "selected": false },
+          "choice2": { "item_name": "item_enchanters_bauble", "selected": false },
+          "choice3": { "item_name": "item_revenants_brooch", "selected": false },
+          "choice4": { "item_name": "item_safety_bubble", "selected": false }
+        },
+        "enchantment_choices": {
+          "choice0": { "item_name": "item_enhancement_quickened", "item_level": 3, "selected": false },
+          "choice1": { "item_name": "item_enhancement_greedy", "item_level": 1, "selected": true },
+          "choice2": { "item_name": "item_enhancement_mystical", "item_level": 3, "selected": false },
+          "choice3": { "item_name": "item_enhancement_tough", "item_level": 3, "selected": false },
+          "choice4": { "item_name": "item_enhancement_keen_eyed", "item_level": 2, "selected": false }
+        }
+      },
+      "tier3": {
+        "tier": 3,
+        "times_crafted": 0,
+        "trinket_choices": {
+          "choice0": { "item_name": "item_fallen_sky", "selected": false },
+          "choice1": { "item_name": "item_heavy_blade", "selected": false },
+          "choice2": { "item_name": "item_conjurers_catalyst", "selected": false },
+          "choice3": { "item_name": "item_demonicon", "selected": false }
+        },
+        "enchantment_choices": {
+          "choice0": { "item_name": "item_enhancement_timeless", "item_level": 1, "selected": false },
+          "choice1": { "item_name": "item_enhancement_evolved", "item_level": 1, "selected": false },
+          "choice2": { "item_name": "item_enhancement_fleetfooted", "item_level": 1, "selected": false },
+          "choice3": { "item_name": "item_enhancement_vampiric", "item_level": 1, "selected": false },
+          "choice4": { "item_name": "item_enhancement_feverish", "item_level": 1, "selected": false }
+        }
+      }
+    }
+  }
+}

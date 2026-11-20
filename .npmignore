@@ -6,6 +6,8 @@
 .gitignore
 .prettierrc
 __tests__
+test
+*.tgz
 dist.browser
 tsc
 node_modules
